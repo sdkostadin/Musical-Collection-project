@@ -20,9 +20,12 @@ public:
 	void dateConvert(std::string text, Date& date);
 	void readUsers();
 	void readSongs();
-	void addPlaylistToUser(std::string username);
-	void initRating(std::unordered_map<std::string, std::vector<bool>>& rating);
-	void rate(std::string username, int curruserid);
+	void save();
+	void initRating();
+	void init();
+	void rate( int currid);
+	void addSong();
+	void showPlaylist(int currid);
 	void showUsers();
 	void functions(Print p, int currid);
 	bool login(Print p, int& currid);
@@ -30,7 +33,6 @@ public:
 	void run();
 private:
 	std::string filename;
-	std::unordered_map<std::string, Playlist> playlists;
 	std::vector<User> users;
 	std::vector<Song> songs;
 	std::unordered_map<std::string, std::vector<bool>> rating;

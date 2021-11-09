@@ -66,6 +66,7 @@ void System::readUsers()
 				in >> word;
 			}
 			users.push_back(curr);
+			//init();
 			curr.clearGenres();
 			
 		
@@ -96,26 +97,66 @@ void System::readSongs()
 			in.getline(word, 32);
 			curr.setYear(std::stoi(word));
 			songs.push_back(curr);
+			rating.insert({ curr.getName(), {} });
+			for (size_t i = 0; i < users.size(); i++)
+			{
+				rating[curr.getName()].push_back(0);
+			}
 		}
 	}
 	in.close();
+
 }
 
-
-void System::addPlaylistToUser(std::string username)
+void System::save()
 {
+	
+	std::ofstream out;
+	out.open("users.txt");
 	for (size_t i = 0; i < users.size(); i++)
 	{
-		if (users[i].getUsername().compare(username) == 0)
+		out << users[i].getUsername() << std::endl;
+		out << users[i].getPassword() << "  "  << users[i].getFullName() << std::endl;
+		out << users[i].getDate()<<std::endl;
+		for (size_t j = 0; j < users[i].getGenres().size(); j++)
 		{
-			users[i].addPlaylist(playlists[username]);
+			out << users[i].getGenres()[j] << std::endl;
 		}
+		if (i < users.size() - 1)
+		{
+			out << "#"<<std::endl;
+		}
+		else
+		{
+			out << "#";
+		}
+	}
+	out.close();
+	
+	out.open("songs.txt");
+	for (size_t i = 0; i < songs.size(); i++)
+	{
+		out << songs[i].getName() << std::endl;
+		out << songs[i].getArtist() << std::endl;
+		out << songs[i].getGenre() << std::endl;
+		out << songs[i].getAlbum() << std::endl;
+		if (i < songs.size() - 1)
+		{
+			out << songs[i].getYear()<<std::endl;
+		}
+		else
+		{
+			out << songs[i].getYear();
+		}
+
 	}
 }
 
 
-void System::initRating(std::unordered_map<std::string, std::vector<bool>>& rating)
+
+void System::initRating()//std::unordered_map<std::string, std::vector<bool>>& rating)
 {
+	/*
 	for (std::unordered_map<std::string, std::vector<bool>>::iterator it=rating.begin(); it!= rating.end(); it++)
 	{
 		for (int i = 0; i < it->second.size(); i++)
@@ -123,22 +164,108 @@ void System::initRating(std::unordered_map<std::string, std::vector<bool>>& rati
 			it->second[i] = false;
 		}
 	}
+	*/
 }
 
-void System::rate(std::string username, int curruserid)
+void System::init()
 {
 	
-		if (rating[username][curruserid] == true)
+	for (std::unordered_map<std::string, std::vector<bool>>::iterator it = rating.begin(); it != rating.end(); it++)
+	{
+		
+		it->second.push_back(0);
+		
+	}
+}
+
+void System::rate( int currid)
+{
+	std::string temp;
+	double rate;
+	std::cout << "Insert song name: ";
+	std::getline(std::cin, temp);
+	for (size_t i = 0; i < songs.size(); i++)
+	{
+		if (temp.compare(songs[i].getName()) == 0)
 		{
-			std::cout << "You already rated this song";
+			if (rating[temp][currid] == 1)
+			{
+				std::cout << "You already rated this song!" << std::endl;
+				return ;
+			}
+			else
+			{
+				std::cout << "Add rate: ";
+				std::cin >> rate;
+				rating[temp][currid] = 1;
+				songs[i].setRating(rate);
+				std::cout << "Rated successfully!" << std::endl;
+				return;
+			}
+		}
+	}
+	std::cout << "Invalid song name!" << std::endl;
+	return ;
+	
+}
+
+void System::addSong()
+{
+	Song curr;
+	std::string temp;
+	std::cout << "Type song name: " << std::endl;
+	std::getline(std::cin, temp);
+	curr.setName(temp);
+	temp.clear();
+	std::cout << "Type song artist: " << std::endl;
+	std::getline(std::cin, temp);
+	curr.setArtist(temp);
+	temp.clear();
+	for (size_t i = 0; i < songs.size(); i++)
+	{
+		if (songs[i].getName().compare(curr.getName()) == 0 && songs[i].getArtist().compare(curr.getArtist()) == 0)
+		{
+			std::cout << "This song is already added! " << std::endl;
 			return;
 		}
-		else
+	}
+	std::cout << "Type song genre: " << std::endl;
+	std::cin >> temp;
+	curr.setGenre(temp);
+	temp.clear();
+	std::cin.ignore();
+	std::cout << "Type song album: " << std::endl;
+	std::getline(std::cin, temp);
+	curr.setAlbum(temp);
+	temp.clear();
+	std::cout << "Type song release year: " << std::endl;
+	int year;
+	std::cin >> year;
+	curr.setYear(year);
+	songs.push_back(curr);
+	rating.insert({ curr.getName(), {} });
+	for (size_t i = 0; i < users.size(); i++)
+	{
+		rating[curr.getName()].push_back(0);
+	}
+	std::cout << "Song " << curr.getName() << " is added successfuly! " << std::endl;
+}
+
+
+void System::showPlaylist(int currid)
+{
+	std::string temp;
+	std::cout << "Type playlist title: " << std::endl;
+	std::getline(std::cin, temp);
+	for (int i = 0; i < users[currid].getPlaylists().size(); i++)
+	{
+		if (users[currid].getPlaylists()[i]->getTitle().compare(temp) == 0)
 		{
-			rating[username][curruserid] = true;
-			std::cout << "You successfuly rated this song";
+			users[currid].getPlaylists()[i]->print();
+			return;
 		}
-	
+	}
+	std::cout << "There is no playlist with that title in your archive!" << std::endl;
 }
 
 void System::showUsers()
@@ -211,6 +338,7 @@ bool System::signin(Print p, int& currid)
 	}
 	temp.clear();
 	users.push_back(curr);
+	init();
 	//std::cout << "Successful registration!" << std::endl;
 	//p.welcome_text(curr.getUsername());
 	currid = users.size() - 1;
@@ -255,9 +383,13 @@ void System::functions(Print p, int currid)
 			std::cout << "Genre list modified!" << std::endl;
 			temp.clear();
 		}
-		else
+		else if (command.compare("rate song") == 0)
 		{
-			std::cout << "Unknown command! " << std::endl;
+			rate(currid);
+		}
+		else if (command.compare("add song") == 0)
+		{
+			addSong();
 		}
 	} while (!command.compare("sign out") == 0);
 	std::cout << "You signed out from user: " << users[currid].getUsername()<<std::endl;
@@ -265,23 +397,17 @@ void System::functions(Print p, int currid)
 
 void System::run()
 {
+	
 	Print p;
 	p.print_start_menu();
 	readUsers();
 	int currid = 0;
-	/*
-	for (size_t i = 0; i < users.size(); i++)
-	{
-		users[i].printUser();
-	}
-	*/
+	initRating();
 	readSongs();
-	/*
 	for (size_t i = 0; i < songs.size(); i++)
 	{
 		songs[i].print();
 	}
-	*/
 	/*
 	playlists["Simeon"].addSong(songs[0]);
 	playlists["Simeon"].addSong(songs[1]);
@@ -322,7 +448,6 @@ void System::run()
 			{
 				std::cout << "There is already user with this username or password!" << std::endl;
 			}
-			
 		}
 		else if (command.compare("show users") == 0)
 		{
@@ -331,11 +456,18 @@ void System::run()
 				users[i].printUser();
 			}
 		}
-		else
+		else if (command.compare("show songs") == 0)
+		{
+			for (size_t i = 0; i < songs.size(); i++)
+			{
+				songs[i].print();
+			}
+		}
+		else 
 		{
 			std::cout << "Unknown command! " << std::endl;
 		}
 	} 
 	while (!command.compare("exit")==0);
-	
+	save();
 }

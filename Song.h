@@ -14,6 +14,7 @@ public:
 	std::string getGenre()const;
 	std::string getAlbum()const;
 	int getYear() const;
+	int getCountPeopleRated() const;
 	double getRating() const;
 	
 	void setName(std::string _name);
@@ -34,6 +35,7 @@ private:
 	std::string album;
 	int year;
 	double rating;
+	int countPeopleRated;
 
 	
 };

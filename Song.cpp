@@ -1,6 +1,6 @@
 #include "Song.h"
 
-Song::Song() : name(""), artist(""), genre(""), album(""), year(0), rating(0)
+Song::Song() : name(""), artist(""), genre(""), album(""), year(0), rating(0), countPeopleRated(0)
 {
 }
 
@@ -27,6 +27,11 @@ std::string Song::getAlbum() const
 int Song::getYear() const
 {
 	return year;
+}
+
+int Song::getCountPeopleRated() const
+{
+	return countPeopleRated;
 }
 
 double Song::getRating() const
@@ -61,7 +66,9 @@ void Song::setYear(int _year)
 
 void Song::setRating(double _rating)
 {
-	rating = _rating;
+	rating += _rating;
+	countPeopleRated++;
+	rating /= countPeopleRated;
 }
 
 bool Song::operator<(const Song& other) const
