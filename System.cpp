@@ -327,6 +327,25 @@ void System::generatePlaylist(Print p, int currid)
 	p.print_playlist_criterion();
 	int n;
 	std::cin >> n;
+	std::unordered_map<int,std::vector<bool>> c;
+	bool temp1 = false;
+	if (std::to_string(n).compare("1"))
+	{
+		int year;
+		std::cin >> year;
+	}
+	else if (std::to_string(n).compare("2"))
+	{
+
+	}
+	else if (std::to_string(n).compare("3"))
+	{
+
+	}
+	else if (std::to_string(n).compare("4"))
+	{
+
+	}
 	std::vector<std::string> criterion;
 	criterion.push_back(std::to_string(n));
 	while (temp.compare("no") != 0)
