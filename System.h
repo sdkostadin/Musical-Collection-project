@@ -26,6 +26,12 @@ public:
 	void rate( int currid);
 	void addSong();
 	void showPlaylist(int currid);
+	bool BeforeAfterYear(Song song, int year, std::string beforaf);
+	bool FromFav(Song song, int currid);
+	bool Rating(Song song, double rating);
+	bool OnlyGenre(Song song, std::string genre);
+	bool isSongOk(Song song);
+	void generatePlaylist(Print p, int currid);
 	void showUsers();
 	void functions(Print p, int currid);
 	bool login(Print p, int& currid);

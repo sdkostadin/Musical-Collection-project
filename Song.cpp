@@ -36,7 +36,7 @@ int Song::getCountPeopleRated() const
 
 double Song::getRating() const
 {
-	return 0.0;
+	return rating;
 }
 
 void Song::setName(std::string _name)
@@ -66,9 +66,15 @@ void Song::setYear(int _year)
 
 void Song::setRating(double _rating)
 {
+	rating *= countPeopleRated;
 	rating += _rating;
 	countPeopleRated++;
 	rating /= countPeopleRated;
+}
+
+void Song::setRatingFile(double _rating)
+{
+	rating =  _rating;
 }
 
 bool Song::operator<(const Song& other) const

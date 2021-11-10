@@ -51,6 +51,7 @@ void System::readUsers()
 			curr.setUsername(word);
 			in >> word;
 			curr.setPassword(word);
+			in.ignore();
 			in.getline(word, 100);
 			curr.setFullName(word);
 			in >> word;
@@ -81,6 +82,7 @@ void System::readSongs()
 	char word[32];
 	std::string date;
 	std::ifstream in;
+	double rate;
 	in.open("songs.txt");
 	if (in)
 	{
@@ -96,12 +98,17 @@ void System::readSongs()
 			curr.setAlbum(word);
 			in.getline(word, 32);
 			curr.setYear(std::stoi(word));
+			in >> rate;
+		//	in.getline(word, 32);
+			curr.setRatingFile(rate);
+			in.ignore();
 			songs.push_back(curr);
 			rating.insert({ curr.getName(), {} });
 			for (size_t i = 0; i < users.size(); i++)
 			{
 				rating[curr.getName()].push_back(0);
 			}
+			
 		}
 	}
 	in.close();
@@ -116,7 +123,7 @@ void System::save()
 	for (size_t i = 0; i < users.size(); i++)
 	{
 		out << users[i].getUsername() << std::endl;
-		out << users[i].getPassword() << "  "  << users[i].getFullName() << std::endl;
+		out << users[i].getPassword() <<" " << users[i].getFullName() << std::endl;
 		out << users[i].getDate()<<std::endl;
 		for (size_t j = 0; j < users[i].getGenres().size(); j++)
 		{
@@ -140,13 +147,14 @@ void System::save()
 		out << songs[i].getArtist() << std::endl;
 		out << songs[i].getGenre() << std::endl;
 		out << songs[i].getAlbum() << std::endl;
+		out << songs[i].getYear() << std::endl;
 		if (i < songs.size() - 1)
 		{
-			out << songs[i].getYear()<<std::endl;
+			out << songs[i].getRating()<<std::endl;
 		}
 		else
 		{
-			out << songs[i].getYear();
+			out << songs[i].getRating();
 		}
 
 	}
@@ -266,6 +274,92 @@ void System::showPlaylist(int currid)
 		}
 	}
 	std::cout << "There is no playlist with that title in your archive!" << std::endl;
+}
+
+bool System::BeforeAfterYear(Song song, int year, std::string beforaf)
+{
+	if (beforaf.compare("after")==0)
+	{
+		return song.getYear() > year;
+	}
+	else if (beforaf.compare("before") == 0)
+	{
+		return song.getYear() < year;
+	}
+}
+
+bool System::FromFav(Song song, int currid)
+{
+	for (int i = 0; i < users[currid].getGenres().size(); i++)
+	{
+		if (song.getGenre().compare(users[currid].getGenres()[i]) == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool System::Rating(Song song, double rating)
+{
+	return song.getRating() > rating;
+}
+
+bool System::OnlyGenre(Song song, std::string genre)
+{
+	return genre.compare(song.getGenre()) == 0;
+}
+
+bool System::isSongOk(Song song)
+{
+	return false;
+}
+
+void System::generatePlaylist(Print p, int currid)
+{
+	std::string temp;
+	std::string combination;
+	std::cout << "Type playlist title: " << std::endl;
+	std::getline(std::cin, temp);
+	Playlist curr;
+	curr.setTitle(temp);
+	temp.clear();
+	p.print_playlist_criterion();
+	int n;
+	std::cin >> n;
+	std::vector<std::string> criterion;
+	criterion.push_back(std::to_string(n));
+	while (temp.compare("no") != 0)
+	{
+		std::cout << "Do you want to combine? *yes or no*" << std::endl;
+		std::cin >> temp;
+		if(temp.compare("yes") == 0)
+		{
+			std::cout << "Insert type of combination:   'or'   or    'and' " << std::endl;
+			std::cin >> combination;
+			criterion.push_back(combination);
+			std::cout << "Your criteria:     *Type the number*"<<std::endl;
+			std::cin >> n;
+			criterion.push_back(std::to_string(n));
+		}
+	}
+	for (size_t i = 0; i < criterion.size(); i++)
+	{
+		if (criterion[i].compare("or") == 0)
+		{
+
+		}
+		else if (criterion[i].compare("and") == 0)
+		{
+		}
+	}
+	for (size_t i = 0; i < songs.size(); i++)
+	{
+		if (isSongOk(songs[i]))
+		{
+			curr.addSong(songs[i]);
+		}
+	}
 }
 
 void System::showUsers()
@@ -391,6 +485,10 @@ void System::functions(Print p, int currid)
 		{
 			addSong();
 		}
+		else if (command.compare("generate playlist") == 0)
+		{
+			generatePlaylist(p, currid);
+		}
 	} while (!command.compare("sign out") == 0);
 	std::cout << "You signed out from user: " << users[currid].getUsername()<<std::endl;
 }
@@ -456,7 +554,7 @@ void System::run()
 				users[i].printUser();
 			}
 		}
-		else if (command.compare("show songs") == 0)
+		else if (command.compare("show collection") == 0)
 		{
 			for (size_t i = 0; i < songs.size(); i++)
 			{

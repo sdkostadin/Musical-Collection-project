@@ -23,6 +23,7 @@ public:
 	void setAlbum(std::string _album);
 	void setYear(int _year);
 	void setRating(double _rating);
+	void setRatingFile(double _rating);
 	bool operator<(const Song& other) const;
 	void print();
 

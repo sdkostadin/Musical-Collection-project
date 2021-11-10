@@ -1,24 +1,24 @@
 Simeon
-3136213   Simeon Kostadinov 
+3136213 Simeon Kostadinov 
 16.6.2000
 rap
 chalga
 #
 Ivan
-311111111   Ivan Ivanov 
+311111111 Ivan Ivanov 
 17.6.2001
 pop
 retro
 #
 Teodora
-38888888   Teodora Staykova 
+38888888 Teodora Staykova 
 8.9.2002
 kpop
 chalga
 #
 Petkan
-121212   Petkan Ivanov
-12.12.2020
-rap
+131312 Petkan Ivanov
+12.2.2020
+rock
 pop
 #

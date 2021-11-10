@@ -47,10 +47,10 @@ void Print::print_playlist_criterion()
 	std::cout << "2) From favourites " << std::endl;
 	std::cout << "3) Rating > -rating- " << std::endl;
 	std::cout << "4) Only -genre- " << std::endl;
-	std::cout << "Example : Only pop" << std::endl;
+	std::cout << " You can combine criterions. For example: 1 and 2,   2 or 4,  (1 and 2) or 4  ";
 	std::cout << std::endl;
 	std::cout << "................................................" << std::endl;
-	std::cout << "Your criteria: ";
+	std::cout << "Your criteria:     *Type the number*";
 }
 void Print::welcome_text(std::string _username)
 {
