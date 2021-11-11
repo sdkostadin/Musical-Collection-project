@@ -21,7 +21,6 @@ public:
 	void readUsers();
 	void readSongs();
 	void save();
-	void initRating();
 	void init();
 	void rate( int currid);
 	void addSong();
@@ -30,7 +29,7 @@ public:
 	bool FromFav(Song song, int currid);
 	bool Rating(Song song, double rating);
 	bool OnlyGenre(Song song, std::string genre);
-	bool isSongOk(Song song);
+	void criterion1(int n, std::unordered_map<int, std::vector<bool>>& c, int currid);
 	void generatePlaylist(Print p, int currid);
 	void showUsers();
 	void functions(Print p, int currid);

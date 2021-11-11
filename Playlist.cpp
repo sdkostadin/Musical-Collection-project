@@ -33,7 +33,7 @@ void Playlist::addSong(const Song& song)
 	}
 
 		songs.push_back(new Song(song));
-		std::sort(songs.begin(), songs.end(), [](Song* a, Song* b) {return a->getName() > b->getName(); });
+		sort();
 		std::cout << "Successfully added song!" << std::endl;
 		
 
@@ -47,6 +47,11 @@ void Playlist::print()
 	{
 		songs[i]->print();
 	}
+}
+
+void Playlist::sort()
+{
+	std::sort(songs.begin(), songs.end(), [](Song* a, Song* b) {return a->getName() < b->getName(); });
 }
 
 

@@ -15,6 +15,7 @@ public:
 	
 	void addSong(const Song& song);
 	void print();
+	void sort();
 
 private:
 

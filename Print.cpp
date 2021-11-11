@@ -50,7 +50,7 @@ void Print::print_playlist_criterion()
 	std::cout << " You can combine criterions. For example: 1 and 2,   2 or 4,  (1 and 2) or 4  ";
 	std::cout << std::endl;
 	std::cout << "................................................" << std::endl;
-	std::cout << "Your criteria:     *Type the number*";
+	std::cout << "Your criteria:     *Type the number*" << std::endl;
 }
 void Print::welcome_text(std::string _username)
 {

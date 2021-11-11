@@ -67,7 +67,6 @@ void System::readUsers()
 				in >> word;
 			}
 			users.push_back(curr);
-			//init();
 			curr.clearGenres();
 			
 		
@@ -99,7 +98,6 @@ void System::readSongs()
 			in.getline(word, 32);
 			curr.setYear(std::stoi(word));
 			in >> rate;
-		//	in.getline(word, 32);
 			curr.setRatingFile(rate);
 			in.ignore();
 			songs.push_back(curr);
@@ -161,19 +159,6 @@ void System::save()
 }
 
 
-
-void System::initRating()//std::unordered_map<std::string, std::vector<bool>>& rating)
-{
-	/*
-	for (std::unordered_map<std::string, std::vector<bool>>::iterator it=rating.begin(); it!= rating.end(); it++)
-	{
-		for (int i = 0; i < it->second.size(); i++)
-		{
-			it->second[i] = false;
-		}
-	}
-	*/
-}
 
 void System::init()
 {
@@ -310,10 +295,64 @@ bool System::OnlyGenre(Song song, std::string genre)
 	return genre.compare(song.getGenre()) == 0;
 }
 
-bool System::isSongOk(Song song)
+void System::criterion1(int n, std::unordered_map<int, std::vector<bool>>& c, int currid)
 {
-	return false;
+	if (std::to_string(n).compare("1")==0)
+	{
+		std::string command;
+		int year;
+		std::cout << "Type year: "<<std::endl;
+		std::cin >> year;
+		std::cout << "Before or after this year? " << std::endl;
+		std::cin.ignore();
+		std::getline(std::cin, command);
+		for (size_t i = 0; i < songs.size(); i++)
+		{
+			if (BeforeAfterYear(songs[i], year, command))
+			{
+				c[1][i]=true;
+			}
+		}
+	}
+	else if (std::to_string(n).compare("2")==0)
+	{
+		for (size_t i = 0; i < songs.size(); i++)
+		{
+			if (FromFav(songs[i], currid))
+			{
+				c[2][i] = true;
+			}
+		}
+	}
+	else if (std::to_string(n).compare("3")==0)
+	{
+		double rating;
+		std::cout << "Insert minimum rating: " << std::endl;
+		std::cin >> rating;
+		for (size_t i = 0; i < songs.size(); i++)
+		{
+			if (Rating(songs[i], rating))
+			{
+				c[3][i] = true;
+			}
+		}
+	}
+	else if (std::to_string(n).compare("4")==0)
+	{
+		std::string genre;
+		std::cout << "Input genre:" << std::endl;
+		std::cin.ignore();
+		std::getline(std::cin, genre);
+		for (size_t i = 0; i < songs.size(); i++)
+		{
+			if (OnlyGenre(songs[i], genre))
+			{
+				c[4][i] = true;
+			}
+		}
+	}
 }
+
 
 void System::generatePlaylist(Print p, int currid)
 {
@@ -328,24 +367,15 @@ void System::generatePlaylist(Print p, int currid)
 	int n;
 	std::cin >> n;
 	std::unordered_map<int,std::vector<bool>> c;
-	bool temp1 = false;
-	if (std::to_string(n).compare("1"))
+	for (int i = 0; i < 4; i++)
 	{
-		int year;
-		std::cin >> year;
+		c.insert({ i+1, {} });
+		for (size_t j = 0; j < songs.size(); j++)
+		{
+			c[i+1].push_back(0);
+		}
 	}
-	else if (std::to_string(n).compare("2"))
-	{
-
-	}
-	else if (std::to_string(n).compare("3"))
-	{
-
-	}
-	else if (std::to_string(n).compare("4"))
-	{
-
-	}
+	criterion1(n,c,currid);
 	std::vector<std::string> criterion;
 	criterion.push_back(std::to_string(n));
 	while (temp.compare("no") != 0)
@@ -357,28 +387,48 @@ void System::generatePlaylist(Print p, int currid)
 			std::cout << "Insert type of combination:   'or'   or    'and' " << std::endl;
 			std::cin >> combination;
 			criterion.push_back(combination);
-			std::cout << "Your criteria:     *Type the number*"<<std::endl;
+			std::cout << "Your criteria:     *Type the number* " << std::endl;
 			std::cin >> n;
+			criterion1(n, c, currid);
 			criterion.push_back(std::to_string(n));
 		}
 	}
+	int first = std::stoi(criterion[0]);
+	std::vector<bool> vec;
+	for (int i = 0; i < songs.size(); i++)
+	{
+		vec.push_back(0);
+		vec[i] = c[first][i];
+	}
+
 	for (size_t i = 0; i < criterion.size(); i++)
 	{
 		if (criterion[i].compare("or") == 0)
 		{
-
+			int p = stoi(criterion[i + 1]);
+			for (int j = 0; j < songs.size(); j++)
+			{
+				vec[j] = vec[j] || c[p][j];
+			}
 		}
 		else if (criterion[i].compare("and") == 0)
 		{
+			int p = stoi(criterion[i + 1]);
+			for (int j = 0; j < songs.size(); j++)
+			{
+				vec[j] = vec[j] && c[p][j];
+			}
 		}
 	}
 	for (size_t i = 0; i < songs.size(); i++)
 	{
-		if (isSongOk(songs[i]))
+		if (vec[i])
 		{
 			curr.addSong(songs[i]);
 		}
 	}
+	curr.sort();
+	users[currid].addPlaylist(curr);
 }
 
 void System::showUsers()
@@ -452,8 +502,6 @@ bool System::signin(Print p, int& currid)
 	temp.clear();
 	users.push_back(curr);
 	init();
-	//std::cout << "Successful registration!" << std::endl;
-	//p.welcome_text(curr.getUsername());
 	currid = users.size() - 1;
 	return true;
 }
@@ -508,6 +556,19 @@ void System::functions(Print p, int currid)
 		{
 			generatePlaylist(p, currid);
 		}
+		else if (command.compare("show playlist") == 0)
+		{
+			std::cout << "Input playlist title: " << std::endl;
+			std::string title;
+			std::getline(std::cin, title);
+			for (size_t i = 0; i < users[currid].getPlaylists().size(); i++)
+			{
+				if (title.compare(users[currid].getPlaylists()[i]->getTitle()) == 0)
+				{
+					users[currid].getPlaylists()[i]->print();
+				}
+			}
+		}
 	} while (!command.compare("sign out") == 0);
 	std::cout << "You signed out from user: " << users[currid].getUsername()<<std::endl;
 }
@@ -519,19 +580,7 @@ void System::run()
 	p.print_start_menu();
 	readUsers();
 	int currid = 0;
-	initRating();
 	readSongs();
-	for (size_t i = 0; i < songs.size(); i++)
-	{
-		songs[i].print();
-	}
-	/*
-	playlists["Simeon"].addSong(songs[0]);
-	playlists["Simeon"].addSong(songs[1]);
-	playlists["Simeon"].setTitle("Party hard");
-	addPlaylistToUser("Simeon");
-	users[0].printUser();
-	*/
 	std::string command;
 	std::cout << "Insert command: " << std::endl;
 	do
