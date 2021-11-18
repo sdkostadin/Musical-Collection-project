@@ -9,23 +9,27 @@ class Song
 public:
 
 	Song();
-	std::string getName()const;
-	std::string getArtist()const;
-	std::string getGenre()const;
-	std::string getAlbum()const;
-	int getYear() const;
-	int getCountPeopleRated() const;
-	double getRating() const;
+	virtual ~Song();
 	
-	void setName(std::string _name);
-	void setArtist(std::string _artist);
-	void setGenre(std::string _genre);
-	void setAlbum(std::string _album);
-	void setYear(int _year);
-	void setRating(double _rating);
-	void setRatingFile(double _rating);
+	virtual std::string getName()const;
+	virtual std::string getArtist()const;
+	virtual std::string getGenre()const;
+	virtual std::string getAlbum()const;
+	virtual int getYear() const;
+	virtual int getCountPeopleRated() const;
+	virtual double getRating() const;
+	
+	virtual void setName(std::string _name);
+	virtual void setArtist(std::string _artist);
+	virtual void setGenre(std::string _genre);
+	virtual void setAlbum(std::string _album);
+	virtual void setYear(int _year);
+	virtual void setRating(double _rating);
+	virtual void setRatingFile(double _rating);
 	bool operator<(const Song& other) const;
-	void print();
+	
+	//Prints song's information.
+	virtual void print();
 
 
 private:

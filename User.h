@@ -28,11 +28,22 @@ public:
 	void setBirthDate(Date date);
 	void setGenres(std::vector<std::string> _genres);
 
+	//Adds genre to user's list of favourite genres.
 	void addGenre(std::string genre);
+
+	//Removes genre from user's list of favourite genres.
 	void removeGenre(std::string genre);
+
+	//Clears user's list of favourite genres.
 	void clearGenres();
+
+	//Prints user's list of favourite genres.
 	void printGenres();
+
+	//Adds playlist to user's list of playlists.
 	void addPlaylist(const Playlist& playlist );
+
+	//Prints user's information.
 	void printUser();
 
 private:

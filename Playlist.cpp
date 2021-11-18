@@ -1,6 +1,12 @@
 #include "Playlist.h"
 #include "Playlist.h"
 
+Playlist::Playlist()
+	:title(""),
+	songs({})
+{
+}
+
 std::string Playlist::getTitle() const
 {
 	return title;

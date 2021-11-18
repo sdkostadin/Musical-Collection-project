@@ -4,6 +4,10 @@ Song::Song() : name(""), artist(""), genre(""), album(""), year(0), rating(0), c
 {
 }
 
+Song::~Song()
+{
+}
+
 std::string Song::getName() const
 {
 	return name;

@@ -6,6 +6,7 @@ System::System()
 
 System::~System()
 {
+	filename.clear();
 }
 
 System& System::i()
