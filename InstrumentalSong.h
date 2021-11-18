@@ -1,3 +1,5 @@
+#ifndef INSTRUMENTALSONG_H_
+#define INSTRUMENTALSONG_H_
 #pragma once
 #include "Song.h"
 class InstrumentalSong : public Song
@@ -13,4 +15,4 @@ private:
 
 	std::string bandName;
 };
-
+#endif

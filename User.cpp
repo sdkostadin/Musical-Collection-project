@@ -87,13 +87,11 @@ void User::addGenre(std::string genre)
 	{
 		if (genres[i].compare(genre) == 0)
 		{
-			//std::cout << "Genre is already added.";
 			return ;
 
 		}
 	}
 	genres.push_back(genre);
-	//std::cout << "Genre successfully added.";
 	
 }
 
@@ -104,7 +102,6 @@ void User::removeGenre(std::string genre)
 		if (genres[i].compare(genre) == 0)
 		{
 			genres.erase(genres.begin() + i);
-			//std::cout << "Genre successfully removed!" << std::endl;
 			return;
 		}
 	}
@@ -158,7 +155,6 @@ void User::printUser()
 	else
 	{
 		printGenres();
-		//std::cout << std::endl;
 	}
 	std::cout << "................................" << std::endl;
 	if (playlists.empty())

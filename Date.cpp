@@ -18,7 +18,6 @@ Date::Date(int day, int month, int year)
 
 Date& Date::operator=(const Date& other)
 {
-	// TODO: insert return statement here
 	if (this != &other) {
 
 		copy(other);

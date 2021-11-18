@@ -159,8 +159,6 @@ void System::save()
 	}
 }
 
-
-
 void System::init()
 {
 	
@@ -353,7 +351,6 @@ void System::criterion1(int n, std::unordered_map<int, std::vector<bool>>& c, in
 		}
 	}
 }
-
 
 void System::generatePlaylist(Print p, int currid)
 {
