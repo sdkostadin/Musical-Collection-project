@@ -7,8 +7,8 @@ class InstrumentalSong : public Song
 public:
 	InstrumentalSong();
 	
-	virtual std::string getBandName() const;
-	virtual void setBandName(std::string name);
+	std::string getBandName() const;
+	void setBandName(std::string name);
 	
 	virtual void print() override;
 private:
