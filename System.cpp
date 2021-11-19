@@ -629,7 +629,10 @@ void System::run()
 		}
 		else 
 		{
-			std::cout << "Unknown command! " << std::endl;
+			if (!command.compare("exit") == 0)
+			{
+				std::cout << "Unknown command! " << std::endl;
+			}
 		}
 	} 
 	while (!command.compare("exit")==0);
