@@ -11,7 +11,7 @@
 class System
 {
 public:
-	System();
+
 	~System();
 	static System& i();
 	System(const System&) = delete;
@@ -74,6 +74,7 @@ public:
 	//Runs the program.
 	void run();
 private:
+	System();
 	std::string filename;
 	std::vector<User> users;
 	std::vector<Song> songs;
